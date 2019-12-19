@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, abort, make_response, request
-import unicode
 
 app = Flask(__name__)
 
@@ -37,7 +36,7 @@ def get_word(word_id):
     return jsonify({'task': word[0]})
 
 
-@app.route('words', methods=['POST'])
+@app.route('/words', methods=['POST'])
 def create_word():
     if not request.json or not 'word' in request.json:
         abort(400)
