@@ -20,7 +20,7 @@ dictionary = [
 
 @app.route('/')
 def hello_world():
-    return 'Dictionary'
+    return 'Dictionary v2'
 
 
 @app.route('/words', methods=['GET'])
@@ -38,8 +38,6 @@ def get_word(word_id):
 
 @app.route('/words', methods=['POST'])
 def create_word():
-    # if not request.json or not 'word' in request.json:
-    #     abort(400)
     word = {
         'id': dictionary.__len__() + 1,
         'word': request.form.get('word'),
