@@ -38,12 +38,12 @@ def get_word(word_id):
 
 @app.route('/words', methods=['POST'])
 def create_word():
-    if not request.json or not 'word' in request.json:
-        abort(400)
+    # if not request.json or not 'word' in request.json:
+    #     abort(400)
     word = {
-        'id': 4,
-        'word': request.json['word'],
-        'translation': request.json.get('translation', ""),
+        'id': dictionary.__len__() + 1,
+        'word': request.form.get('word'),
+        'translation': request.form.get('translation'),
         'done': False
     }
     dictionary.append(word)
@@ -52,30 +52,33 @@ def create_word():
 
 @app.route('/words/<int:word_id>', methods=['PUT'])
 def update_task(word_id):
-    word = list(filter(lambda t: t['id'] == word_id, dictionary))
-    if len(word) == 0:
-        abort(404)
-    if not request.json:
-        abort(400)
-    if 'word' in request.json and type(request.json['word']) != unicode:
-        abort(400)
-    if 'translation' in request.json and type(request.json['translation']) is not unicode:
-        abort(400)
-    if 'done' in request.json and type(request.json['done']) is not bool:
-        abort(400)
-    word[0]['word'] = request.json.get('word', word[0]['word'])
-    word[0]['translation'] = request.json.get('translation', word[0]['translation'])
-    word[0]['done'] = request.json.get('done', word[0]['done'])
-    return jsonify({'task': word[0]})
+
+    for word in dictionary:
+        if word.get('id') == word_id:
+
+            if request.form.get('word') is not None:
+                word['word'] = request.form.get('word')
+
+            if request.form.get('translation') is not None:
+                word['translation'] = request.form.get('translation')
+
+            if request.form.get('done') is not None:
+                word['done'] = request.form.get('done')
+
+            return jsonify({'result': True})
+
+    return jsonify({'task': False})
 
 
 @app.route('/words/<int:word_id>', methods=['DELETE'])
 def delete_word(word_id):
-    word = filter(lambda t: t['id'] == word_id, dictionary)
-    if len(word) == 0:
-        abort(404)
-    dictionary.remove(word[0])
-    return jsonify({'result': True})
+
+    for word in dictionary:
+        if word.get('id') == word_id:
+            dictionary.remove(word)
+            return jsonify({'result': True})
+
+    return jsonify({'result': False})
 
 
 if __name__ == '__main__':
