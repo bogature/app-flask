@@ -40,8 +40,8 @@ def get_word(word_id):
 def create_word():
     word = {
         'id': dictionary.__len__() + 1,
-        'word': request.form.get('word'),
-        'translation': request.form.get('translation'),
+        'word': request.json['word'],
+        'translation': request.json['translation'],
         'done': False
     }
     dictionary.append(word)
@@ -54,14 +54,17 @@ def update_task(word_id):
     for word in dictionary:
         if word.get('id') == word_id:
 
-            if request.form.get('word') is not None:
-                word['word'] = request.form.get('word')
+            print('word 1')
+            print(request.json['word'])
 
-            if request.form.get('translation') is not None:
-                word['translation'] = request.form.get('translation')
+            if request.json['word'] is not None:
+                word['word'] = str(request.json['word'])
 
-            if request.form.get('done') is not None:
-                word['done'] = request.form.get('done')
+            if request.json['translation'] is not None:
+                word['translation'] = str(request.json['translation'])
+
+            if request.json['done'] is not None:
+                word['done'] = bool(request.json['done'])
 
             return jsonify({'result': True})
 
